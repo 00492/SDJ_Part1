@@ -8,18 +8,11 @@ public class BulletData : ScriptableObject
     [System.Serializable]
     public struct Bullet
     {
-        public enum BulletType
-        {
-            Fire,
-            Ice,
-            Dark
-        }
-
         public float _speed;
         public float _size;
+        public float _lifeTime;
         public int _damage;
         public Color _color;
-        public BulletType _type;
     }
 
     public List<Bullet> _bullets = new List<Bullet>();

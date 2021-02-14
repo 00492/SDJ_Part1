@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
-    [SerializeField] private Rigidbody _rigidBody;
+    [SerializeField] private Rigidbody2D _rigidBody;
     private BulletData.Bullet _projectileData;
     private Vector3 _moveDir = new Vector3();
 
@@ -17,12 +17,25 @@ public class Projectile : MonoBehaviour
 
         GetComponent<Renderer>().material.color = _projectileData._color;
         transform.localScale *= _projectileData._size;
+
+        StartCoroutine(DestroySelf());
     }
 
 
     private void Update()
     {
         _rigidBody.velocity = _moveDir * _projectileData._speed;
+    }
+
+    private IEnumerator DestroySelf()
+    {
+        float timer = 0f;
+        while(timer < _projectileData._lifeTime)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 
     // Collision with enemy

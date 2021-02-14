@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0daf182f156470147a74b847c23ef2a6, type: 3}
+  m_Name: DialogueData
+  m_EditorClassIdentifier: 
+  _questions:
+  - _text: Pourquoi t'es dans la lune ?
+    _answer:
+    - _text: Je vois rien
+    - _text: Je sais pas
+    - _text: Dark side of the moon
+  - _text: How does it feel ?
+    _answer:
+    - _text: To be a complete unknow
+    - _text: To be left alone
+    - _text: Like a rolling stone
+  - _text: How are you ?
+    _answer:
+    - _text: Piss off
+    - _text: Not bad
+    - _text: Fine!
