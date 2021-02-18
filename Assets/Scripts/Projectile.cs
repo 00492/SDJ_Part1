@@ -21,7 +21,6 @@ public class Projectile : MonoBehaviour
         StartCoroutine(DestroySelf());
     }
 
-
     private void Update()
     {
         _rigidBody.velocity = _moveDir * _projectileData._speed;
@@ -38,5 +37,4 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Collision with enemy
 }

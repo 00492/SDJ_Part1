@@ -1,27 +1,55 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public int _bulletIndex = 0;
+    private const string STEP_COUNTS = "Step Count : ";
 
+    [SerializeField] private HUDExample _hud;
+
+    [Header("Player")]
     [SerializeField] private Rigidbody _rigidBody;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private float _moveSpeed = 250f;
     [SerializeField] private Animator _animator;
 
+    [Header("Bullet")]
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private BulletData _bulletData;
 
+    [Header("Steps")]
+    [SerializeField] private TextMeshProUGUI _tmProSteps;
+    [SerializeField] private AudioSource _audioSourceFootStep;
+    private int _stepCount = 0;
+
+
     private int _direction = 0;
     private Vector3 _velocity;
+
+    private Action _onGetHit;
+
+    public int _bulletIndex = 0;
+
+    private void Awake()
+    {
+        _onGetHit += _hud.TakeDamage;
+        _onGetHit += HitFeedback;
+    }
 
 
     private void Update()
     {
         CheckInput();
         Move();
+    }
+
+    private void OnDestroy()
+    {
+        _onGetHit -= _hud.TakeDamage;
+        _onGetHit -= HitFeedback;
     }
 
     private void CheckInput()
@@ -49,6 +77,10 @@ public class Player : MonoBehaviour
         {
             ShootProjectile();
         }
+        else if(Input.GetMouseButtonDown(1))
+        {
+            _onGetHit?.Invoke();
+        }
     }
 
     private void Move()
@@ -67,5 +99,17 @@ public class Player : MonoBehaviour
         direction.z = 0;
 
         bullet.Init(direction.normalized, _bulletData._bullets[_bulletIndex]);
+    }
+
+    public void StepCount()
+    {
+        _stepCount++;
+        _audioSourceFootStep.Play();
+        _tmProSteps.SetText(STEP_COUNTS + _stepCount);
+    }
+
+    private void HitFeedback()
+    {
+        _tmProSteps.SetText("OUCH !");
     }
 }
