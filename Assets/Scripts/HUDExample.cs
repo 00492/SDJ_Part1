@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,23 +9,25 @@ public class HUDExample : MonoBehaviour
 {
     [SerializeField] private Slider _lifeBar;
 
-    [SerializeField] private TextMeshProUGUI _timerText;
-    private float _realTimer = 20f;
+    [SerializeField] private TextMeshProUGUI _killCount;
+    [SerializeField] private TextMeshProUGUI _xpCount;
+    private int _kills = 0;
+    private int _xp = 0;
 
 
     private void Start()
     {
-        StartCoroutine(TickTock());
+        Player._onKill += UpdateXP;
+        Player._onPlayerHit += TakeDamage;
     }
 
-    private IEnumerator TickTock()
+    private void UpdateXP(int xp)
     {
-        while (_realTimer > 0)
-        {
-            _realTimer -= Time.deltaTime;
-            _timerText.SetText(_realTimer.ToString("0"));
-            yield return null;
-        }
+        _kills++;
+        _killCount.SetText("Kills : " + _kills.ToString());
+
+        _xp += xp;
+        _xpCount.SetText("XP : " + _xp.ToString());
     }
 
 

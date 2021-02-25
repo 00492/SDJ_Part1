@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour
     private IEnumerator DestroySelf()
     {
         float timer = 0f;
-        while(timer < _projectileData._lifeTime)
+        while (timer < _projectileData._lifeTime)
         {
             timer += Time.deltaTime;
             yield return null;
@@ -37,4 +37,15 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Enemy script = other.gameObject.GetComponent<Enemy>();
+            script.TakeDamage(_projectileData._damage);
+
+            StopAllCoroutines();
+            Destroy(gameObject);
+        }
+    }
 }

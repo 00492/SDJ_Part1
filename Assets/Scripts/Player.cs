@@ -29,14 +29,14 @@ public class Player : MonoBehaviour
     private int _direction = 0;
     private Vector3 _velocity;
 
-    private Action _onGetHit;
+    public static Action _onPlayerHit;
+    public static Action<int> _onKill;
 
     public int _bulletIndex = 0;
 
     private void Awake()
     {
-        _onGetHit += _hud.TakeDamage;
-        _onGetHit += HitFeedback;
+        _onPlayerHit += HitFeedback;
     }
 
 
@@ -48,8 +48,7 @@ public class Player : MonoBehaviour
 
     private void OnDestroy()
     {
-        _onGetHit -= _hud.TakeDamage;
-        _onGetHit -= HitFeedback;
+        _onPlayerHit -= HitFeedback;
     }
 
     private void CheckInput()
@@ -79,7 +78,7 @@ public class Player : MonoBehaviour
         }
         else if(Input.GetMouseButtonDown(1))
         {
-            _onGetHit?.Invoke();
+            _onPlayerHit?.Invoke();
         }
     }
 
@@ -110,6 +109,6 @@ public class Player : MonoBehaviour
 
     private void HitFeedback()
     {
-        _tmProSteps.SetText("OUCH !");
+        transform.localScale /= 2;
     }
 }
