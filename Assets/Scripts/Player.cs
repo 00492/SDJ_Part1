@@ -34,10 +34,25 @@ public class Player : MonoBehaviour
 
     public int _bulletIndex = 0;
 
+
+
+    public Action _someAction;
+
+
+
     private void Awake()
     {
         _onPlayerHit += HitFeedback;
+
+
+        if(_someAction != null)
+        {
+            _someAction();
+        }
+
     }
+
+
 
 
     private void Update()

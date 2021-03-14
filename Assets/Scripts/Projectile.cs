@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ public class Projectile : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidBody;
     private BulletData.Bullet _projectileData;
     private Vector3 _moveDir = new Vector3();
-
 
     public void Init(Vector3 direction, BulletData.Bullet data)
     {
