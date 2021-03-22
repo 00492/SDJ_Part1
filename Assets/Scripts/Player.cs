@@ -8,8 +8,6 @@ public class Player : MonoBehaviour
 {
     private const string STEP_COUNTS = "Step Count : ";
 
-    [SerializeField] private HUDExample _hud;
-
     [Header("Player")]
     [SerializeField] private Rigidbody _rigidBody;
     [SerializeField] private SpriteRenderer _renderer;
@@ -35,25 +33,10 @@ public class Player : MonoBehaviour
     public int _bulletIndex = 0;
 
 
-
-    public Action _someAction;
-
-
-
     private void Awake()
     {
         _onPlayerHit += HitFeedback;
-
-
-        if(_someAction != null)
-        {
-            _someAction();
-        }
-
     }
-
-
-
 
     private void Update()
     {
