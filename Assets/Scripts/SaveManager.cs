@@ -5,18 +5,10 @@ using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
-    public struct PlayerData
-    {
-        public string _name;
-        public float _posX;
-        public float _posY;
-        public float _hp;
-        public int _killCount;
-
-        public Vector3 _pos;
-    }
-
     private const string RESSOURCE_NAME = "SaveManager";
+    private const string SAVE_FILE = "SaveGame.json";
+
+    public PlayerData _playerData;
 
     private static SaveManager _instance;
     public static SaveManager Instance
@@ -48,53 +40,50 @@ public class SaveManager : MonoBehaviour
     }
 
     // USING JSON TEXT FILE--------------------------------------------------
-    public void Save(PlayerData data)
+    public void Save()
     {
-        string json = JsonUtility.ToJson(data);
+        string path = GetPath(SAVE_FILE);
 
-        File.WriteAllText("saveGame.json", json);
+        EventManager.Instance.DispatchEvent(EventID.SaveGame);
+
+        string json = JsonUtility.ToJson(_playerData);
+        File.WriteAllText(path, json);
+
     }
 
-    public PlayerData Load()
+    public void Load()
     {
-        string json = File.ReadAllText("saveGame.json");
+        string path = GetPath(SAVE_FILE);
 
-        return JsonUtility.FromJson<PlayerData>(json);
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            _playerData = JsonUtility.FromJson<PlayerData>(json);
+
+            EventManager.Instance.DispatchEvent(EventID.LoadGame);
+        }
+    }
+
+    private string GetPath(string path)
+    {
+        return Path.Combine(Application.persistentDataPath, path);
     }
 
     // USING PLAYERPREFS--------------------------------------------------
     public void SavePP(PlayerData data)
     {
-        PlayerPrefs.SetFloat("posX", data._posX);
-        PlayerPrefs.SetFloat("posY", data._posY);
+        _playerData = data;
+
         PlayerPrefs.SetFloat("hp", data._hp);
-        PlayerPrefs.SetInt("kills", data._killCount);
-        PlayerPrefs.SetString("name", data._name);
     }
 
     public PlayerData LoadPP()
     {
         PlayerData data = new PlayerData();
 
-        if (PlayerPrefs.HasKey("posX"))
-        {
-            data._posX = PlayerPrefs.GetFloat("posX");
-        }
-        if (PlayerPrefs.HasKey("posY"))
-        {
-            data._posY = PlayerPrefs.GetFloat("posY");
-        }
         if (PlayerPrefs.HasKey("hp"))
         {
             data._hp = PlayerPrefs.GetFloat("hp");
-        }
-        if (PlayerPrefs.HasKey("kills"))
-        {
-            data._killCount = PlayerPrefs.GetInt("kills");
-        }
-        if (PlayerPrefs.HasKey("name"))
-        {
-            data._name = PlayerPrefs.GetString("name");
         }
 
         return data;
