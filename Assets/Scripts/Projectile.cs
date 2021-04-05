@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : PoolItem
 {
 
     [SerializeField] private Rigidbody2D _rigidBody;
@@ -16,9 +16,15 @@ public class Projectile : MonoBehaviour
         _moveDir = direction;
 
         GetComponent<Renderer>().material.color = _projectileData._color;
-        transform.localScale *= _projectileData._size;
+        transform.localScale = Vector3.one * _projectileData._size;
 
         StartCoroutine(DestroySelf());
+    }
+
+    public override void Activate()
+    {
+        transform.position = transform.parent.position;
+        base.Activate();
     }
 
     private void Update()
@@ -34,7 +40,13 @@ public class Projectile : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        Remove();
+    }
+
+    public override void Remove()
+    {
+        base.Remove();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -45,7 +57,8 @@ public class Projectile : MonoBehaviour
             script.TakeDamage(_projectileData._damage);
 
             StopAllCoroutines();
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Remove();
         }
     }
 }

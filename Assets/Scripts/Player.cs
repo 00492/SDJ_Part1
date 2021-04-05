@@ -17,6 +17,12 @@ public class Player : MonoBehaviour
     [Header("Bullet")]
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private BulletData _bulletData;
+    [SerializeField] private Pool _bulletPool;
+
+    [Header("Audio")]
+    [SerializeField] private AudioPool _audioPool;
+    [SerializeField] private AudioClip _shootClip;
+    [SerializeField] private AudioClip _pickupClip;
 
     [Header("Steps")]
     [SerializeField] private TextMeshProUGUI _tmProSteps;
@@ -78,6 +84,11 @@ public class Player : MonoBehaviour
         {
             _onPlayerHit?.Invoke();
         }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _audioPool.PlaySFX(_pickupClip, Camera.main.transform.position);
+        }
     }
 
     private void Move()
@@ -89,13 +100,17 @@ public class Player : MonoBehaviour
 
     private void ShootProjectile()
     {
-        GameObject go = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+        //GameObject go = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+        PoolItem go = _bulletPool.GetAPoolObject();
         Projectile bullet = go.GetComponent<Projectile>();
 
         Vector3 direction = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position);
         direction.z = 0;
 
         bullet.Init(direction.normalized, _bulletData._bullets[_bulletIndex]);
+
+
+        _audioPool.PlaySFX(_shootClip, transform.position);
     }
 
     public void StepCount()
